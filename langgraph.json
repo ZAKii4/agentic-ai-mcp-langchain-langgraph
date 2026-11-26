@@ -1,0 +1,8 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "agentic_rag": "./b_langgraph/agentic_rag.py:graph",
+    "sav": "./d_sav/orchestrator.py:graph"
+  },
+  "env": ".env"
+}

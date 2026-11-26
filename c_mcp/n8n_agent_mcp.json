@@ -1,0 +1,113 @@
+{
+  "id": "ap5AgentMcp0001",
+  "name": "AP5 - Agent N8N + serveur MCP",
+  "active": false,
+  "nodes": [
+    {
+      "id": "ap5-node-1",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "options": {}
+      },
+      "webhookId": "ap5-agent-mcp-chat"
+    },
+    {
+      "id": "ap5-node-2",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "options": {
+          "systemMessage": "Use the tools to answer; never invent data. Answer in French."
+        }
+      }
+    },
+    {
+      "id": "ap5-node-3",
+      "name": "Ollama Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        200,
+        220
+      ],
+      "parameters": {
+        "model": "qwen3:8b",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "credentials": {
+        "ollamaApi": {
+          "id": "ap5ollama000001",
+          "name": "Ollama local"
+        }
+      }
+    },
+    {
+      "id": "ap5-node-4",
+      "name": "MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        220
+      ],
+      "parameters": {
+        "endpointUrl": "http://127.0.0.1:8000/mcp",
+        "serverTransport": "httpStreamable",
+        "authentication": "none",
+        "include": "all",
+        "options": {}
+      }
+    }
+  ],
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "connections": {
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
